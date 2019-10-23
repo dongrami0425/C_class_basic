@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DSPE_2012706067_이동민_5", "DSPE_2012706067_이동민_5\DSPE_2012706067_이동민_5.vcxproj", "{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Debug|x64.ActiveCfg = Debug|x64
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Debug|x64.Build.0 = Debug|x64
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Debug|x86.ActiveCfg = Debug|Win32
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Debug|x86.Build.0 = Debug|Win32
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Release|x64.ActiveCfg = Release|x64
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Release|x64.Build.0 = Release|x64
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Release|x86.ActiveCfg = Release|Win32
+		{AD37BA5C-26A1-4145-968A-B8D1EAD8A0B6}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {797A4704-DFAD-4C11-858A-1AE2874947C6}
+	EndGlobalSection
+EndGlobal
