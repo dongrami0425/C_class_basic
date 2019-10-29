@@ -1,3 +1,7 @@
+//DSPE_2012706067_ÀÌµ¿¹Î_3ÁÖÂ÷
+//< Image Convolution>
+// - Gaussian, sobel, Laplacian, sharpening filter
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -482,7 +486,7 @@ void SharpeningMask(unsigned char** img_in, unsigned char** img_out, int width, 
 	double Sharpening_3x3[3][3] =
 	{
 		{ -1, -1, -1 },
-		{ -1, 9, -1 },
+		{ -1,  9, -1 },
 		{ -1, -1, -1 }
 	};
 
@@ -516,7 +520,8 @@ void SharpeningMask(unsigned char** img_in, unsigned char** img_out, int width, 
 			img_in_pad[height + 1 + i][width + 1 + j] = img_in_pad[height + 1 - 1][width + 1 - 1];
 		}
 	}
-
+	
+	// Clipping Range : 0< img_value <256
 	for (i = 0; i < height; i++) {
 		for (j = 0; j < width; j++) {
 			temp = 0;

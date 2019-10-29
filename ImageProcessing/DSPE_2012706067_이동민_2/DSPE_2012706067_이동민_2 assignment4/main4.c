@@ -1,11 +1,13 @@
 //DSPE_2012706067_이동민_2주차
-
+// < 2-D Digital Data Operation >
+// - 7x7 average filter
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
 
 #define WIDTH 512
 #define HEIGH 512
+#define mask_size 7 // 5x5 마스크 사용시 5로 수정
 
 typedef unsigned char BYTE;
 
@@ -24,10 +26,10 @@ int main()
 		printf("File open failed\n");
 	}
 
-	img_in = (BYTE**)malloc(sizeof(BYTE*) * (HEIGH + 6));
-	for (i = 0; i < HEIGH + 6; i++)
+	img_in = (BYTE**)malloc(sizeof(BYTE*) * (HEIGH + mask_size-1));
+	for (i = 0; i < HEIGH + mask_size-1; i++)
 	{
-		img_in[i] = (BYTE*)malloc(sizeof(BYTE) * (WIDTH + 6));
+		img_in[i] = (BYTE*)malloc(sizeof(BYTE) * (WIDTH + mask_size-1));
 	}
 	for (i = 0; i < HEIGH; i++) {
 		fread(img_in[i], sizeof(BYTE), WIDTH, fp_in);
@@ -36,7 +38,7 @@ int main()
 	for (i = 0; i < HEIGH; i++) //padding
 	{
 
-		for (j = 0; j < 6; j++)
+		for (j = 0; j < mask_size-1; j++)
 		{
 			img_in[i+][WIDTH + j] = img_in[i][WIDTH - 1];
 		}
@@ -45,16 +47,16 @@ int main()
 	for (j = 0; j < WIDTH; j++)
 	{
 
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < mask_size-1; i++)
 		{
 			img_in[HEIGH + i][j] = img_in[HEIGH - 1][j];
 		}
 	}
 
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < mask_size-1; i++)
 	{
 
-		for (j = 0; j < 6; j++)
+		for (j = 0; j < mask_size-1; j++)
 		{
 			img_in[HEIGH + i][WIDTH + j] = img_in[HEIGH + i][WIDTH - 1];
 		}
@@ -74,16 +76,16 @@ int main()
 		for (j = 0; j < WIDTH; j++)
 		{
 			temp = 0;
-			for (m = 0; m < 7; m++)
+			for (m = 0; m < mask_size; m++)
 			{
 
-				for (n = 0; n < 7; n++)
+				for (n = 0; n < mask_size; n++)
 				{
 					temp += img_in[i + m][j + n];
 
 				}
 			}
-			img_out[i][j] = (BYTE)(temp / 49);
+			img_out[i][j] = (BYTE)(temp / (mask_size*mask_size));
 		}
 	}
 

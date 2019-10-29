@@ -1,5 +1,9 @@
-//DSPE_2012706067_ÀÌµ¿¹Î_2ÁÖÂ÷
-// ¾ÕÀÇ assignment1°ú Áßº¹µÇ´Â ÁÖ¼®µéÀº »©°í ÀÛ¼ºÇÏ¿´½À´Ï´Ù.
+ï»¿//DSPE_2012706067_ì´ë™ë¯¼_2ì£¼ì°¨
+// ì•ì˜ assignment1ê³¼ ì¤‘ë³µë˜ëŠ” ì£¼ì„ë“¤ì€ ë¹¼ê³  ì‘ì„±í•˜ì˜€ìŠµë‹ˆë‹¤.
+// < 2-D Digital Data Operation >
+// - > first Derivtives for edge detection - sharpening spatial filter
+// - > y(i,j) = x(i,j) â€“ x(i,j+1) //y(i,j) = x(i,j) â€“ x(i+1,j)
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include<math.h>
@@ -14,33 +18,36 @@ typedef unsigned char BYTE;
 int main()
 {
 	FILE *fp_in1 = 0, *fp_in2 = 0, *fp_in3 = 0, *fp_in4 = 0, *fp_out_1 = 0, *fp_out_2 = 0, *fp_out_3, *fp_out_4;
-	//*fp_in1  *fp_in2 *fp_out_1 *fp_out_2 => LenaÀÌ¹ÌÁö ÀÔÃâ·Â º¯¼ö
-	//*fp_in3  *fp_in4 *fp_out_3 *fp_out_4 => MitÀÌ¹ÌÁö ÀÔÃâ·Â º¯¼ö 
+	//*fp_in1  *fp_in2 *fp_out_1 *fp_out_2 => Lenaì´ë¯¸ì§€ ì…ì¶œë ¥ ë³€ìˆ˜
+	//*fp_in3  *fp_in4 *fp_out_3 *fp_out_4 => Mitì´ë¯¸ì§€ ì…ì¶œë ¥ ë³€ìˆ˜ 
 	BYTE **img_in1 = 0, **img_in2 = 0, **img_out_1 = 0, **img_out_2 = 0, **img_out_3 = 0, **img_out_4 = 0;
-	//**img_in1  **img_out_1 **img_out_2 => LenaÀÌ¹ÌÁö ¸Ş¸ğ¸®ÇÒ´ç º¯¼ö
-	//**img_in2  **img_out_3 **img_out_4 => MitÀÌ¹ÌÁö ¸Ş¸ğ¸®ÇÒ´ç º¯¼ö
+	//**img_in1  **img_out_1 **img_out_2 => Lenaì´ë¯¸ì§€ ë©”ëª¨ë¦¬í• ë‹¹ ë³€ìˆ˜
+	//**img_in2  **img_out_3 **img_out_4 => Mitì´ë¯¸ì§€ ë©”ëª¨ë¦¬í• ë‹¹ ë³€ìˆ˜
 	int i = 0;
 	int j = 0;
 	int temp_1 = 0, temp_2 = 0, temp_3 = 0, temp_4 = 0;
 
-	//ÆÄÀÏ ¿ÀÇÂ
+	//íŒŒì¼ ì˜¤í”ˆ
 	fp_in1 = fopen("Lena(512x512).raw", "rb");
 	fp_in2 = fopen("Mit(512x512).raw", "rb");
 	if (fp_in1 == NULL) {
 		printf("File open failed\n");
 	}
 
-	//2D ÇÒ´ç
-	img_in1 = (BYTE **)malloc(sizeof(BYTE*) * (HEIGHT + 1));  //ÆĞµùÀ» À§ÇØ +1
+	//2D í• ë‹¹
+	img_in1 = (BYTE **)malloc(sizeof(BYTE*) * (HEIGHT + 1));  //íŒ¨ë”©ì„ ìœ„í•´ +1
+
 	img_in2 = (BYTE **)malloc(sizeof(BYTE*) * (HEIGHT + 1));
+
 	for (i = 0; i < HEIGHT + 1; i++) {
 		img_in1[i] = (BYTE *)malloc(sizeof(BYTE) * (WIDTH + 1));
 		img_in2[i] = (BYTE *)malloc(sizeof(BYTE) * (WIDTH + 1));
 	}
 
-	img_out_1 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);   //¿øº»»çÀÌÁî·Î ÇÒ´ç
+	img_out_1 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);   //ì›ë³¸ì‚¬ì´ì¦ˆë¡œ í• ë‹¹
 	img_out_2 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);
-	img_out_3 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);   //¿øº»»çÀÌÁî·Î ÇÒ´ç
+
+	img_out_3 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);   //ì›ë³¸ì‚¬ì´ì¦ˆë¡œ í• ë‹¹
 	img_out_4 = (BYTE **)malloc(sizeof(BYTE*) * HEIGHT);
 	for (i = 0; i < HEIGHT; i++) {
 		img_out_1[i] = (BYTE*)malloc(sizeof(BYTE) * WIDTH);
@@ -49,13 +56,13 @@ int main()
 		img_out_4[i] = (BYTE*)malloc(sizeof(BYTE) * WIDTH);
 	}
 
-	////fopenÀ» »ç¿ëÇÏ¿© ÆÄÀÏÀ» ÀĞ°í fp_in¿¡ ÀúÀå.
+	////fopenì„ ì‚¬ìš©í•˜ì—¬ íŒŒì¼ì„ ì½ê³  fp_inì— ì €ì¥.
 	for (i = 0; i < HEIGHT; i++) {
 		fread(img_in1[i], sizeof(BYTE), WIDTH, fp_in1);
 		fread(img_in2[i], sizeof(BYTE), WIDTH, fp_in2);
 	}
 
-	////  ÀÌ¹ÌÁö¸¦ ºÎ¿©ÇÑ ÇÒ´ç¸Ş¸ğ¸®¿¡ ¸Â°Ô ÆĞµù
+	////  ì´ë¯¸ì§€ë¥¼ ë¶€ì—¬í•œ í• ë‹¹ë©”ëª¨ë¦¬ì— ë§ê²Œ íŒ¨ë”©
 	for (i = 0; i < HEIGHT; i++) {
 		img_in1[i][WIDTH] = img_in1[i][WIDTH - 1];
 		img_in2[i][WIDTH] = img_in2[i][WIDTH - 1];
@@ -67,17 +74,19 @@ int main()
 	}
 
 
-	// ÇÁ·Î¼¼½Ì
+	// í”„ë¡œì„¸ì‹±
 
 	for (i = 0; i < HEIGHT; i++) {
 		for (j = 0; j < WIDTH; j++) {
-			temp_1 = img_in1[i][j] - img_in1[i][j + 1];            //f(x,y) - f(x+1,y) ¿¬»ê¼öÇà, ¿§Áö°ËÃâ½Ã »ç¿ëÇÏ´Â ¼ö½Ä, 1Â÷¹ÌºĞ
-			temp_2 = img_in1[i][j] - img_in1[i + 1][j];            //f(x,y) - f(x,y+1) ¿¬»ê¼öÇà
-			temp_3 = img_in2[i][j] - img_in2[i][j + 1];            //f(x,y) - f(x+1,y) ¿¬»ê¼öÇà
-			temp_4 = img_in2[i][j] - img_in2[i + 1][j];            //f(x,y) - f(x,y+1) ¿¬»ê¼öÇà
+			temp_1 = img_in1[i][j] - img_in1[i][j + 1];            //horizontal ì—£ì§€ ê²€ì¶œ y = f(x,y) - f(x+1,y) ì—°ì‚°ìˆ˜í–‰, ì—£ì§€ê²€ì¶œì‹œ ì‚¬ìš©í•˜ëŠ” ìˆ˜ì‹, 1ì°¨ë¯¸ë¶„
+			temp_2 = img_in1[i][j] - img_in1[i + 1][j];            //vertival   ì—£ì§€ ê²€ì¶œ y= f(x,y) - f(x,y+1) ì—°ì‚°ìˆ˜í–‰
 
-			img_out_1[i][j] = (BYTE)floor((((temp_1 + 255) / 2.0) + 45)); //for dynamic range
+			temp_3 = img_in2[i][j] - img_in2[i][j + 1];            //f(x,y) - f(x+1,y) ì—°ì‚°ìˆ˜í–‰
+			temp_4 = img_in2[i][j] - img_in2[i + 1][j];            //f(x,y) - f(x,y+1) ì—°ì‚°ìˆ˜í–‰
+
+			img_out_1[i][j] = (BYTE)floor((((temp_1 + 255) / 2.0) + 45)); //for dynamic range // +45ëŠ” ì´ë¯¸ì§€ë¥¼ ì˜ ë³´ì´ê²Œ í•˜ê¸°ìœ„í•´ ë”í•´ì¤€(shift) ì„ì˜ì˜ ê°’.
 			img_out_2[i][j] = (BYTE)floor((((temp_2 + 255) / 2.0) + 45)); //for dynamic range
+
 			img_out_3[i][j] = (BYTE)floor((((temp_3 + 255) / 2.0) + 45)); //for dynamic range
 			img_out_4[i][j] = (BYTE)floor((((temp_4 + 255) / 2.0) + 45)); //for dynamic range
 
@@ -86,9 +95,9 @@ int main()
 	}
 
 
-	fp_out_1 = fopen("[output_vertical]Lena(512x512).raw", "wb"); // output »ı¼º
+	fp_out_1 = fopen("[output_vertical]Lena(512x512).raw", "wb"); // output ìƒì„±
 	fp_out_2 = fopen("[output_horizontal]Lena(512x512).raw", "wb");
-	fp_out_3 = fopen("[output_vertical]Mit(512x512).raw", "wb"); // output »ı¼º
+	fp_out_3 = fopen("[output_vertical]Mit(512x512).raw", "wb"); // output ìƒì„±
 	fp_out_4 = fopen("[output_horizontal]Mit(512x512).raw", "wb");
 
 

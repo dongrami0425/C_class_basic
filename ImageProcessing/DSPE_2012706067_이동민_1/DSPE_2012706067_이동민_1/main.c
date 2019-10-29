@@ -1,4 +1,6 @@
 //1주차_2012706067_이동민
+//< Gradient Operation >
+// y=f(x)-f(x-1)
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h> //Header file
 #include<stdlib.h> //malloc, free를 쓰기위한 Header

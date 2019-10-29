@@ -1,10 +1,11 @@
 //DSPE_2012706067_이동민_2주차
-
+// < 2-D Digital Data Operation >
+// - Imgage file I/O and Memory alloacation
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h> //헤더파일
 #include<stdlib.h>
 
-#define WIDTH 512 //이미지 사이즈
+#define WIDTH 512 //이미지 사이즈 => 함수 매크로 사용.(함수처럼 매크로가 변수를 가지는 것.)
 #define HEIGH 512
 
 typedef unsigned char BYTE;
