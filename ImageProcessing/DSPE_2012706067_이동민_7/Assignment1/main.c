@@ -1,5 +1,11 @@
 //DSPE_2012706067_이동민_7_Assignment1
-
+// < 2-D block-based Discrete Cosine Transform >
+// - DCT :
+//		- type-II DCT가 가장 널리 사용됨
+//		- Non-Peoriodic signal을 sampling 및 peoriodic discrete하여 Peodiodic signal로 변환후 DCT 수식을 이용해
+//		  spatial domain에서 frequency domain으로 변환하여 신호에 대한 정보를 파악하는 것.
+//		- DCT가 적용된 영상 분석시 Low Frequency에 대다수의 데이터 정보가 형성되어 있으며 high frequency range에 적은 수의 값들이 형성된다. 
+//		  이를 이용해 JPEG, MPEG과 같은 데이터 압축에서 양자화과정을 거쳐 함께 사용된다.
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>

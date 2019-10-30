@@ -1,5 +1,6 @@
 //DSPE_2012706067_¿ÃµøπŒ_9
-
+// <Intra Predition Part2>
+// - intra predictor DC, horizontal, vertical, diagonal Left, diagonal Right Ω«Ω¿
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>

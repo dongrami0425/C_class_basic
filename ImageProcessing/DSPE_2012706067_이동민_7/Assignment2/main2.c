@@ -1,4 +1,6 @@
 //DSPE_2012706067_이동민_Assignment2
+// < 2-D block-based DCT >
+// 2-D DCT는 1-D DCT를 두번 적용하여도 가능하다. 연산속도 면에서 더 좋다.
 #define _CRT_SECURE_NO_WARNINGS // Header file
 #include<stdio.h>
 #include<stdlib.h>

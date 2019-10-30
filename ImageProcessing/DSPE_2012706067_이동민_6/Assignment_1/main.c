@@ -1,5 +1,6 @@
 //DSPE_2012706067_¿ÃµøπŒ_6
-
+// < Image Restoration Part2 >
+// - Contra-harmonic mean filtering, Alpha-trimmed mean filtering.
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>

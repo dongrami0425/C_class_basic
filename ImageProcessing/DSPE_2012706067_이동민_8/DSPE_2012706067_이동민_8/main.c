@@ -1,4 +1,6 @@
 //DSPE_2012706067_이동민_8
+// <Intra Predition Part1>
+// - intra predictor DC, horizontal, vertical 실습
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
@@ -213,8 +215,9 @@ void Encode(BYTE** img_ori, BYTE** img_pred, int** img_resi, BYTE** img_recon)
 
 	BYTE** img_padding = MemAlloc_2D(WIDTH + 1, HEIGHT + 1);
 
+	// Make Predictor
 	for (i = 0; i < HEIGHT; i++)	{
-
+		// predictor sample values for img_padding
 		for (j = 0; j < WIDTH; j++)	{
 
 			img_padding[i + 1][j + 1] = img_ori[i][j];
@@ -222,6 +225,7 @@ void Encode(BYTE** img_ori, BYTE** img_pred, int** img_resi, BYTE** img_recon)
 		}
 	}
 
+	//reference sample value loop for img_padding
 	for (i = 0; i < HEIGHT; i++)	{
 		img_padding[i + 1][0] = 128;
 	}
@@ -241,12 +245,12 @@ void Encode(BYTE** img_ori, BYTE** img_pred, int** img_resi, BYTE** img_recon)
 
 				for (n = 0; n < BLOCK_SIZE; n++){
 
-					ori[m*BLOCK_SIZE + n] = img_ori[i + m][j + n];
+					ori[m*BLOCK_SIZE + n] = img_ori[i + m][j + n]; // img_ori의 4x4영역을 1차원 행렬 ori에 저장.
 				}
 
 			}
 
-			//get reference samples
+			//get reference samples //best mode계산에서 ori와의 연산을 위해 1차원 행렬로 ref 행렬을 취함.
 			for (m = 0; m < BLOCK_SIZE; m++){
 
 				ref[m] = img_padding[i][j + m];

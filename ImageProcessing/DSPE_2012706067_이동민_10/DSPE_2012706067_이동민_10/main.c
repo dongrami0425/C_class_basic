@@ -1,4 +1,5 @@
 //DSPE_2012706067_이동민_10
+// < Video file I/O >
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@ int main()
 	FILE *fp_in = fopen("Suzie_CIF_150_30.rgb", "rb");
 	FILE *fp_cpy_out = fopen("[Copy]Suzie_CIF.rgb", "wb");
 	FILE *fp_avr_out = fopen("[Avr]Suzie_CIF.rgb", "wb");
-	FILE *fp_sub_out = fopen("[Suv]Suzie_CIF.rgb", "wb");
+	FILE *fp_sub_out = fopen("[Sub]Suzie_CIF.rgb", "wb");
 
 
 	BYTE **img_out, **img_in, **img_prev;
@@ -46,10 +47,10 @@ int main()
 
 		if (first_frame == 1)     // 첫번째 프레임일 때 
 		{
-			cpy_frame(img_in, img_prev, WIDTH, HEIGHT * 3);  // 이전 프레임이 없으니까 -연산을 못하므로 첫번째 프레임은 저장해야한다. 따라서 첫프레임을 저장
+			cpy_frame(img_in, img_prev, WIDTH, HEIGHT * 3);  // 이전 프레임이 없으니까 (-)연산을 못하므로 첫번째 프레임은 저장해야한다. 따라서 첫프레임을 저장
 
 
-			first_frame = 0;  // 조건문을 적용하기 때문에 다른 조건으로 넘어가기 위해서 0을 넣어준다.
+			first_frame = 0;  // 조건문을 적용하기 때문에 다른 조건(else)으로 넘어가기 위해서 0을 넣어준다.
 		}
 
 		else{  // 첫 프레임이 아닐 때

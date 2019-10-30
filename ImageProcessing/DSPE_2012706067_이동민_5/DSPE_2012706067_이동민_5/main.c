@@ -1,4 +1,6 @@
 //DSPE_2012706067_이동민_5
+// < Image Restoration >
+// - 가우시안 노이즈, Salt&Pepper 노이즈 제거를 위한 Spatial filtering(2-D Arithmetic mean filtering, Median filtering.)
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -141,7 +143,7 @@ void ArithmeticMeanFilter(unsigned char** img_in, unsigned char** img_out, int m
 	}
 
 
-	for (i = 0; i < height; i++) { //spatial filtering : 2-D arithmetic mean filtering nxn
+	for (i = 0; i < height; i++) { //spatial filtering : 2-D arithmetic mean filtering nxn : 가우시안 노이즈 제거에 효과적.
 		for (j = 0; j < width; j++) {
 			temp = 0;
 			for (h = 0; h < mask_size; h++) {
@@ -203,12 +205,12 @@ void MedianMeanFilter(unsigned char** img_in, unsigned char** img_out, int mask_
 	
 
 
-	for (i = 0; i < height; i++) { //spatial filtering : 2-D median mean filtering nxn
+	for (i = 0; i < height; i++) { //spatial filtering : 2-D median mean filtering nxn : Salt&Pepper노이즈 제거에 효과적.
 		for (j = 0; j < width; j++) {
 			temp = 0;
 			n = 0;
 
-			for (h = 0; h < mask_size; h++) {  //1-D recorering
+			for (h = 0; h < mask_size; h++) {  //1-D reordering
 				for (w = 0; w < mask_size; w++) {
 					data[n] = img_in_padding[i + h][j + w];
 					n += 1;

@@ -9,7 +9,7 @@
 #define WIDTH  256
 #define HEIGHT  256
 
-#define Padding_Scale 2
+#define imgsize_Scale 2
 
 #define Clip(x) x<0?0:(x>255?255:x) // x<0이면 0, x>0일때 x>255이면 x=255 아니면 x값으로 대입 // Clipping 함수를 함수 매크로로 정의
 
@@ -37,9 +37,9 @@ int main()
 	img_in = MemAlloc_2D(WIDTH, HEIGHT);
 	FileRead("Lena(256x256).raw", img_in, WIDTH, HEIGHT);
 
-	img_out_copy = MemAlloc_2D(WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
-	img_out_ave = MemAlloc_2D(WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
-	img_out_filter = MemAlloc_2D(WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
+	img_out_copy = MemAlloc_2D(WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
+	img_out_ave = MemAlloc_2D(WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
+	img_out_filter = MemAlloc_2D(WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
 
 	upsampling_copy(img_in, img_out_copy, WIDTH, HEIGHT);
 	upsampling_ave(img_in, img_out_ave, WIDTH, HEIGHT);
@@ -47,18 +47,18 @@ int main()
 
 
 
-	FileWrite("[upsampling_copy]Lena(512x512).raw", img_out_copy, WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
-	FileWrite("[upsampling_ave]Lena(512x512).raw", img_out_ave, WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
-	FileWrite("[upsampling_filter]Lena(512x512).raw", img_out_filter, WIDTH * Padding_Scale, HEIGHT * Padding_Scale);
+	FileWrite("[upsampling_copy]Lena(512x512).raw", img_out_copy, WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
+	FileWrite("[upsampling_ave]Lena(512x512).raw", img_out_ave, WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
+	FileWrite("[upsampling_filter]Lena(512x512).raw", img_out_filter, WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale);
 
 
-	printf("Copy method PSNR : %.2F dB \n\n", GetPSNR(img_out_filter, img_out_copy, WIDTH * Padding_Scale, HEIGHT * Padding_Scale));
-	printf("Average method PSNR : %.2F dB \n\n", GetPSNR(img_out_filter, img_out_ave, WIDTH * Padding_Scale, HEIGHT * Padding_Scale));
+	printf("Copy method PSNR : %.2F dB \n\n", GetPSNR(img_out_filter, img_out_copy, WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale));
+	printf("Average method PSNR : %.2F dB \n\n", GetPSNR(img_out_filter, img_out_ave, WIDTH * imgsize_Scale, HEIGHT * imgsize_Scale));
 
 	MemFree_2D(img_in, HEIGHT); //메모리 free
-	MemFree_2D(img_out_copy, HEIGHT * Padding_Scale);
-	MemFree_2D(img_out_ave, HEIGHT * Padding_Scale);
-	MemFree_2D(img_out_filter, HEIGHT * Padding_Scale);
+	MemFree_2D(img_out_copy, HEIGHT * imgsize_Scale);
+	MemFree_2D(img_out_ave, HEIGHT * imgsize_Scale);
+	MemFree_2D(img_out_filter, HEIGHT * imgsize_Scale);
 
 
 
@@ -120,9 +120,9 @@ void upsampling_copy(BYTE** img_in, BYTE** img_out, int width, int height)
 
 	for (i = 0; i < height; i++) {
 		for (j = 0; j < width; j++) {
-			for (m = 0; m < Padding_Scale; m++) {
-				for (n = 0; n < Padding_Scale; n++) {
-					img_out[Padding_Scale * i + m][Padding_Scale * j + n] = img_in[i][j];
+			for (m = 0; m < imgsize_Scale; m++) {
+				for (n = 0; n < imgsize_Scale; n++) {
+					img_out[imgsize_Scale * i + m][imgsize_Scale * j + n] = img_in[i][j];
 				}
 			}
 		}
@@ -133,7 +133,7 @@ void upsampling_copy(BYTE** img_in, BYTE** img_out, int width, int height)
 void upsampling_ave(BYTE** img_in, BYTE** img_out, int width, int height)
 {
 	BYTE** img_in_padding = MemAlloc_2D(width + 1, height + 1);
-	BYTE** img_out_padding = MemAlloc_2D((width + 1) * Padding_Scale, (height + 1) * Padding_Scale);
+	BYTE** img_out_padding = MemAlloc_2D((width + 1) * imgsize_Scale, (height + 1) * imgsize_Scale);
 
 	int i, j;
 
@@ -171,9 +171,9 @@ void upsampling_ave(BYTE** img_in, BYTE** img_out, int width, int height)
 
 
 	//패딩된 부분을 버리고 이미지 원 사이즈를 취함
-	for (i = 0; i < height * Padding_Scale; i++)
+	for (i = 0; i < height * imgsize_Scale; i++)
 	{
-		for (j = 0; j < width * Padding_Scale; j++)
+		for (j = 0; j < width * imgsize_Scale; j++)
 		{
 			img_out[i][j] = img_out_padding[i][j];
 		}
@@ -181,7 +181,7 @@ void upsampling_ave(BYTE** img_in, BYTE** img_out, int width, int height)
 
 
 	MemFree_2D(img_in_padding, height + 1);
-	MemFree_2D(img_out_padding, (height + 1) * Padding_Scale);
+	MemFree_2D(img_out_padding, (height + 1) * imgsize_Scale);
 
 }
 
@@ -195,7 +195,7 @@ void upsampling_filter(BYTE** img_in, BYTE** img_out, int width, int height)
 	int i, j, m;
 
 	BYTE** img_in_padding = MemAlloc_2D(width + 7, height + 7); // 원본 이미지를 처리하기위한 패딩된 메모리 공간 할당 
-	BYTE** img_out_padding = MemAlloc_2D((width + 7) * Padding_Scale, (height + 7) * Padding_Scale); // 필터적용을 위한 패딩 및 2배로 이미지 확장하여 할당.
+	BYTE** img_out_padding = MemAlloc_2D((width + 7) * imgsize_Scale, (height + 7) * imgsize_Scale); // 필터적용을 위한 패딩 및 2배로 이미지 확장하여 할당.
 
 
 	for (i = 0; i < height; i++)
@@ -245,7 +245,7 @@ void upsampling_filter(BYTE** img_in, BYTE** img_out, int width, int height)
 	{
 		for (j = 0; j < width + 7; j++)
 		{
-			img_out_padding[i * Padding_Scale][j * Padding_Scale] = img_in_padding[i][j]; // 패딩된 이미지를 2배로 확장한 메모리공간에 저장.
+			img_out_padding[i * imgsize_Scale][j * imgsize_Scale] = img_in_padding[i][j]; // 패딩된 이미지를 2배로 확장한 메모리공간에 저장.
 		}
 	}
 
@@ -259,10 +259,10 @@ void upsampling_filter(BYTE** img_in, BYTE** img_out, int width, int height)
 			temp = 0;
 			for (m = 0; m < 8; m++)
 			{
-				temp += (interpol_filter[m] * img_out_padding[i * Padding_Scale][j * Padding_Scale + m * Padding_Scale]) / sum;
+				temp += (interpol_filter[m] * img_out_padding[i * imgsize_Scale][j * imgsize_Scale + m * imgsize_Scale]) / sum;
 			}
 
-			img_out_padding[i * Padding_Scale][j * Padding_Scale + 7] = temp;
+			img_out_padding[i * imgsize_Scale][j * imgsize_Scale + 7] = temp;
 		}
 	}
 
@@ -271,23 +271,23 @@ void upsampling_filter(BYTE** img_in, BYTE** img_out, int width, int height)
 	//interpolation 가로방향으로
 	for (i = 0; i < height; i++)
 	{
-		for (j = 6; j < width * Padding_Scale + 6; j++)
+		for (j = 6; j < width * imgsize_Scale + 6; j++)
 		{
 			temp = 0;
 			for (m = 0; m < 8; m++)
 			{
-				temp += (interpol_filter[m] * img_out_padding[i * Padding_Scale + m * Padding_Scale][j]) / sum;
+				temp += (interpol_filter[m] * img_out_padding[i * imgsize_Scale + m * imgsize_Scale][j]) / sum;
 			}
 
-			img_out_padding[i * Padding_Scale + 7][j] = temp;
+			img_out_padding[i * imgsize_Scale + 7][j] = temp;
 		}
 	}
 
 
 	//패딩된 부분을 버리고 이미지 원 사이즈를 취함
-	for (i = 0; i < height * Padding_Scale; i++)
+	for (i = 0; i < height * imgsize_Scale; i++)
 	{
-		for (j = 0; j < width * Padding_Scale; j++)
+		for (j = 0; j < width * imgsize_Scale; j++)
 		{
 			img_out[i][j] = img_out_padding[i + 6][j + 6];
 		}
@@ -296,7 +296,7 @@ void upsampling_filter(BYTE** img_in, BYTE** img_out, int width, int height)
 
 
 	MemFree_2D(img_in_padding, height + 7);
-	MemFree_2D(img_out_padding, (height + 7) * Padding_Scale);
+	MemFree_2D(img_out_padding, (height + 7) * imgsize_Scale);
 }
 
 float GetPSNR(BYTE** img_ori, BYTE** img_dist, int width, int height) //PSNR을 취하기위한 계산 함수

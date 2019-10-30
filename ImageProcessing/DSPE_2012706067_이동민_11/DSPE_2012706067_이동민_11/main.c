@@ -1,4 +1,6 @@
 //DSPE_2012706067_¿ÃµøπŒ_11
+// < Color Conversion >
+// - Color Conversion [RGB to YUV] or [YUV to RGB]
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<math.h>
