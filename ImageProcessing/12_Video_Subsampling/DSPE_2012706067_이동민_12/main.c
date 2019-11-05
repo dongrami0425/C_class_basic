@@ -1,4 +1,7 @@
 //DSPE_2012706067_이동민_12
+// < Video Subsampling(Chroma subsampling) >
+// - RGB to YUV Conversion
+// - YUV 444,422, 420 conversion
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h> //헤더파일 선언
 #include<math.h>
