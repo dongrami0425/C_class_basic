@@ -1,5 +1,5 @@
 //DSPE_2012706067_이동민_6
-
+// 4가지 spatial filtering을 진행하고 노이즈가 없는 이미지와의 PSNR 계산을 통해 filter효과를 알아봄.
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
